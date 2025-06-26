@@ -11,7 +11,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "server:dev": "npx json-server --port 3001 --watch ./public/db.json",
-    "server:start": "npx json-server --port 3001 --watch db.json"
+    "server:start": "npx json-server --port 3001 --watch ./dist/db.json"
   },
   "dependencies": {
     "axios": "^1.6.8",
