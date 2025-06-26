@@ -1,20 +1,25 @@
-import path from "path";
-import fs from "fs/promises";
-
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const dbPath = path.resolve(__dirname, "../dist/db.json");
+const persons = [
+  {
+    name: "Arto Hellas",
+    number: "040-123456",
+    id: "1",
+  },
+  {
+    name: "Ada Lovelace",
+    number: "39-44-5323523",
+    id: "2",
+  },
+  {
+    name: "Dan Abramov",
+    number: "12-43-234345",
+    id: "3",
+  },
+];
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
-      const data = await fs.readFile(dbPath, "utf-8");
-      const jsonData = JSON.parse(data);
-      res.status(200).json(jsonData);
+      res.status(200).json(persons);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to read database file" });
@@ -22,13 +27,10 @@ export default async function handler(req, res) {
   } else if (req.method === "POST") {
     try {
       const body = req.body;
-      const data = await fs.readFile(dbPath, "utf-8");
-      const jsonData = JSON.parse(data);
 
-      const newEntry = { id: String(jsonData.length + 1), ...body };
-      jsonData.push(newEntry);
+      const newEntry = { id: String(persons.length + 1), ...body };
+      persons.push(newEntry);
 
-      await fs.writeFile(dbPath, JSON.stringify(jsonData, null, 2));
       res.status(201).json(newEntry);
     } catch (error) {
       console.error(error);
@@ -38,10 +40,7 @@ export default async function handler(req, res) {
     try {
       const { id, ...updatedData } = req.body;
 
-      const data = await fs.readFile(dbPath, "utf-8");
-      const jsonData = JSON.parse(data);
-
-      const index = jsonData.findIndex((entry) => entry.id === id);
+      const index = persons.findIndex((entry) => entry.id === id);
 
       if (index === -1) {
         return res.status(404).json({ error: "Entry not found" });
@@ -51,10 +50,9 @@ export default async function handler(req, res) {
         newObject: { name, number },
       } = updatedData;
       const updatedEntry = { name, number };
-      jsonData[index] = { ...jsonData[index], ...updatedEntry };
+      persons[index] = { ...persons[index], ...updatedEntry };
 
-      await fs.writeFile(dbPath, JSON.stringify(jsonData, null, 2), "utf-8");
-      res.status(200).json(jsonData[index]);
+      res.status(200).json(persons[index]);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to update data" });
@@ -63,16 +61,12 @@ export default async function handler(req, res) {
     try {
       const { id } = req.body;
 
-      const data = await fs.readFile(dbPath, "utf-8");
-      const jsonData = JSON.parse(data);
+      const updatedData = persons.filter((entry) => entry.id !== id);
 
-      const updatedData = jsonData.filter((entry) => entry.id !== id);
-
-      if (jsonData.length === updatedData.length) {
+      if (persons.length === updatedData.length) {
         return res.status(404).json({ error: "Entry not found" });
       }
 
-      await fs.writeFile(dbPath, JSON.stringify(updatedData, null, 2), "utf-8");
       res.status(204).end();
     } catch (error) {
       console.error(error);
