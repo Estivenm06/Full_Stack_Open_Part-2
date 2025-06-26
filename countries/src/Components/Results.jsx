@@ -1,16 +1,16 @@
-import React, {useState} from "react";
+/* eslint-disable react/prop-types */
+import {useState} from "react";
 import OneCountry from "./OneCountry";
 
-const Results = ({result}) => {
+const Results = ({ country }) => {
     const [show, setShow] = useState(false)
 
-    const handleShowClick = () => {
-        setShow(!show)
-    }
+    const handleShowClick = () => setShow(prev => !prev);
+
     return (
         <li>
-            {result.name.common} <button onClick={handleShowClick}>show</button>
-            {show === true && <OneCountry key={result.name.common} result={result}/>}
+            {country.name.common} <button onClick={handleShowClick}>show</button>
+            {show && <OneCountry key={country.name.common} country={country}/>}
         </li>
     );
 };

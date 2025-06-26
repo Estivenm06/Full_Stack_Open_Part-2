@@ -1,22 +1,22 @@
 /* EXERCISES 2.18 - 2.20 */
-import React from 'react';
-import axios from "axios"
 import { useState, useEffect } from 'react';
+import axios from "axios"
+
 import Choice from "./Components/Choice"
 
 const App = () => {
-  const [countries, setCountries] = useState(null)
+  const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState("")
 
   useEffect(() => {
       axios
-        .get("https://studies.cs.helsinki.fi/restcountries/api/all")
-        .then(response => { setCountries(response.data) })
+        .get(process.env.apiHelsinki)
+        .then(({data}) => setCountries(data) )
   }, [])
-  if(!countries){
-    return null
+  if(countries.length < 0){
+    return <div>Loading...</div>
   }
-  const handleFilterChange = e => { setFilter(e.target.value) }
+  const handleFilterChange = e => setFilter(e.target.value);
 
   return (
     <div>
