@@ -56,6 +56,10 @@ const App = () => {
       setAlert({ message: "Name or Number cannot be empty", type: "error" });
       return;
     }
+    if(number.length <= 5) {
+      setAlert({message: "Number has to be greater than 5", type: 'error'});
+      return;
+    }
 
     const newObject = {
       name,
