@@ -1,25 +1,16 @@
 import axios from "axios";
 
-const baseUrl = "/persons";
+const baseUrl = "/api/handler";
 
-const getAll = async () => {
-  const request = await axios.get(baseUrl);
-  return await request.data;
-};
+const getAll = async () => await axios.get(baseUrl).then(({ data }) => data);
 
-const update = async (id, newObject) => {
-  const request = await axios.put(`${baseUrl}/${id}`, newObject);
-  return await request.data;
-};
+const update = async (id, newObject) =>
+  await axios.put(baseUrl, { id, newObject }).then(({ data }) => data);
 
-const create = async (newObject) => {
-  const request = await axios.post(baseUrl, newObject);
-  return await request.data;
-};
+const create = async (newObject) =>
+  await axios.post(baseUrl, newObject).then(({ data }) => data);
 
-const htppDelete = async (id) => {
-  const request = await axios.delete(`${baseUrl}/${id}`);
-  return await request.data;
-};
+const httpDelete = async (id) =>
+  await axios.delete(baseUrl, { data: { id } }).then(({ data }) => data);
 
-export default { getAll, update, create, htppDelete };
+export default { getAll, update, create, httpDelete };

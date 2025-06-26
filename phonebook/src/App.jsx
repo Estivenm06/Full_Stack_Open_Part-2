@@ -56,8 +56,8 @@ const App = () => {
       setAlert({ message: "Name or Number cannot be empty", type: "error" });
       return;
     }
-    if(number.length <= 5) {
-      setAlert({message: "Number has to be greater than 5", type: 'error'});
+    if (number.length <= 5) {
+      setAlert({ message: "Number has to be greater than 5", type: "error" });
       return;
     }
 
@@ -116,7 +116,7 @@ const App = () => {
     if (person) {
       setAlert({ message: `Deleting ${person.name}`, type: "success" });
       personService
-        .htppDelete(id)
+        .httpDelete(id)
         .then(() => {
           setPersons((persons) => persons.filter((e) => e.id !== id));
         })
